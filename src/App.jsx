@@ -9,7 +9,7 @@ const App = () => {
         <Experience />
       </Canvas>
     </Suspense>
-  )
+  ) 
 }
 
 export default App
