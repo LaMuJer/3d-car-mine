@@ -11,11 +11,11 @@ import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
 
 export function Model(props) {
-  const { nodes, materials } = useGLTF('/scene-transformed.glb')
+  const { nodes, materials } = useGLTF('./model/scene-transformed.glb')
   return (
     <group {...props} dispose={null}>
-      <group scale={0}>
-        <group position={[2.14, 1.6, -3.29]}>
+      <group scale={1}>
+        <group position={[2.14, .5, -3.29]}>
           <mesh geometry={nodes.mesh_0_0nr_mat_0_0.geometry} material={materials.mat_0} />
           <mesh geometry={nodes.mesh_0_1nr_mat_0_0.geometry} material={materials.mat_0} />
           <mesh geometry={nodes.mesh_0_2nr_mat_0_0.geometry} material={materials.mat_0} />
@@ -184,4 +184,4 @@ export function Model(props) {
   )
 }
 
-useGLTF.preload('/scene-transformed.glb')
+useGLTF.preload('./model/scene-transformed.glb')

@@ -1,28 +1,56 @@
-import { OrbitControls } from '@react-three/drei'
+import { Environment, Float, Lightformer, OrbitControls } from '@react-three/drei'
+import { useFrame } from '@react-three/fiber'
 import { useControls } from 'leva'
+import { useRef } from 'react'
+import { Model } from './Scene'
 
 const Experience = () => {
-    const { sp, pos } = useControls(('spotLight', {
-        intensity: { value: .5, min: 0, max: 100, step: 0.1 },
-        pos: {
-            value: { x: 0, y: 15 },
-            step: .01
-        }
-    }))
+
+    function LightFun({ positions = [2, 0, 2, 0, 2, 0, 2, 0] }) {
+        const groupRef = useRef()
+
+        console.log(groupRef.current)
+
+        useFrame((state, delta) => (
+            groupRef.current.position.z += delta * 10
+        ))
+
+        return (
+            <>
+                <Lightformer
+                    intensity={.75}
+                    rotation-x={Math.PI / 2}
+                    position={[0, 5, -9]}
+                    scale={[10, 10, 1]}
+                // color="yellow"
+                />
+                <group rotation={[0, .5, 0]} >
+                    <group ref={groupRef}>
+                        {positions.map((x, i) => (
+                            <Lightformer
+                                key={i}
+                                intensity={2}
+                                rotation={[Math.PI / 2, 0, 0]}
+                                position={[x, 4, i * 4.5]}
+                                scale={[3, 3, 1]}
+                                form='circle'
+                                color="yellow"
+                            />
+                        ))}
+                    </group>
+                </group>                
+            </>
+        )
+    }
+
     return (
         <>
-            <color args={[0, 0, 0]} attach="background" />
             <OrbitControls />
-            {/* general lights */}
-            <ambientLight intensity={.5} />
-            <spotLight position={[pos.x, -pos.y, 0]} {...sp} />
-
-            <mesh >
-                <boxGeometry args={[1, 1, 1]} />
-                <meshBasicMaterial color={'red'} />
-            </mesh>
+            <Model />
+            <Environment background resolution={256} blur={0}  >
+                <LightFun />
+            </Environment>
         </>
-
     )
 }
 

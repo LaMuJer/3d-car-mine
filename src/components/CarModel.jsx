@@ -1,17 +1,22 @@
 import { useGLTF } from "@react-three/drei"
+import { useLayoutEffect } from "react"
 
-const CarModel = () => {
+const CarModel = (props) => {
 
-    const model = useGLTF('/model/scene.gltf')
+    const { scene, materials, nodes } = useGLTF('/model/scene.gltf')
 
-    console.log(model)
+    // useLayoutEffect(() => {
+    //     // code
+    //     Object.values(nodes).forEach((node) => node.isMesh && ())
+    // }, [nodes, materials])
+
+
+    console.log(nodes)
 
     return (
-        // <primitive object={} />
-        <mesh>
-            <boxGeometry  />
-            <meshBasicMaterial color={'red'} />
-        </mesh>
+        <>            
+            <primitive object={scene} {...props} />
+        </>
     )
 }
 
