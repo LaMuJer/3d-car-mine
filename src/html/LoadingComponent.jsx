@@ -2,13 +2,13 @@ import { useProgress } from '@react-three/drei'
 import { animated, useSpring } from 'react-spring'
 import '../Loading.css'
 
-const LoadingComponent = () => {
+const LoadingComponent = ({active, progress}) => {
 
-    const { active, progress, errors, item, loaded, total } = useProgress()
+    // const { active, progress, errors, item, loaded, total } = useProgress()
     const springs = useSpring({
         from: { opacity: 1 },
         to: {
-            opacity: 0.2
+            opacity: 0
         }
     })
 

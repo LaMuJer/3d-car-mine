@@ -8,13 +8,20 @@ title: hongqi h9
 
 import React, { useRef } from "react";
 import { useGLTF } from "@react-three/drei";
+import { useSpring, animated } from '@react-spring/three'
 
 export function Model(props) {
   const { nodes, materials } = useGLTF("./model/scene-transformed.glb");
+  const { scale, rotation } = props.active ? 0 : useSpring({
+    from: { scale: 1, rotation: [0, Math.PI / 2, 0] },
+    to: { scale: 1.4, rotation: [0, Math.PI, 0] },
+    config: { duration: 2000 }
+  })
+
   return (
     <group {...props} dispose={null}>
-      <group rotation={[-Math.PI / 2, 0, Math.PI]}>
-        <group rotation={[Math.PI / 2, 0, 0]} scale={1.4}>
+      <group >
+        <animated.group rotation={rotation} scale={scale}>
           <group position={[2.1, 0.7, -3.3]}>
             <mesh
               castShadow
@@ -989,7 +996,7 @@ export function Model(props) {
               material={materials["mat_0.002_4"]}
             />
           </group>
-        </group>
+        </animated.group>
       </group>
     </group>
   );

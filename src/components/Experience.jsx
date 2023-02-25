@@ -1,17 +1,16 @@
 import { Center, ContactShadows, Environment, PerformanceMonitor } from '@react-three/drei'
-import { useFrame } from '@react-three/fiber'
+import { act, useFrame } from '@react-three/fiber'
 import { Suspense, useState } from 'react'
 import Lights from './Lights'
 import { Model } from './Scene'
 import * as THREE from 'three'
-import { useSpring, animated } from '@react-spring/three'
 
-const Experience = ({active}) => {
+const Experience = ({ active }) => {
 
     const [degraded, degrade] = useState(false)
 
     // Camera Movement
-    let v = new THREE.Vector3()
+    let v = new THREE.Vector3() 
     useFrame((state, delta) => {
         const t = state.clock.elapsedTime
         state.camera.position.lerp(v.set(
@@ -23,16 +22,14 @@ const Experience = ({active}) => {
     })
 
     // Animations
-    // const { springs } = useSpring({
-    //     blur: active ? 1 : 0
-    // })
+
 
     return (
         <>
             <Suspense>
                 {/* Model */}
                 <Center>
-                    <Model />
+                    <Model active={active} />
                 </Center>
                 {/* Lighting */}
                 <Environment background resolution={256} blur={1} frames={degraded ? 1 : Infinity} >
