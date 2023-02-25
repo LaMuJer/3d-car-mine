@@ -1,0 +1,16 @@
+.loading-container{
+    position: fixed;
+    z-index: 10;
+    width: 100vw;
+    height: 100svh;
+    background-color: #47126b;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.loading-container h1{
+    color: #fff;
+    font-size: 10rem;
+    font-family: f2;
+}
+

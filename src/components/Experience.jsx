@@ -1,55 +1,48 @@
-import { Environment, Float, Lightformer, OrbitControls } from '@react-three/drei'
+import { Center, ContactShadows, Environment, PerformanceMonitor } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
-import { useControls } from 'leva'
-import { useRef } from 'react'
+import { Suspense, useState } from 'react'
+import Lights from './Lights'
 import { Model } from './Scene'
+import * as THREE from 'three'
+import { useSpring, animated } from '@react-spring/three'
 
-const Experience = () => {
+const Experience = ({active}) => {
 
-    function LightFun({ positions = [2, 0, 2, 0, 2, 0, 2, 0] }) {
-        const groupRef = useRef()
+    const [degraded, degrade] = useState(false)
 
-        console.log(groupRef.current)
+    // Camera Movement
+    let v = new THREE.Vector3()
+    useFrame((state, delta) => {
+        const t = state.clock.elapsedTime
+        state.camera.position.lerp(v.set(
+            3 + Math.sin(t / 5),
+            1,
+            4.1 + Math.cos(t / 5) / 2
+        ), .5)
+        state.camera.lookAt(0, 0, 0)
+    })
 
-        useFrame((state, delta) => (
-            groupRef.current.position.z += delta * 10
-        ))
-
-        return (
-            <>
-                <Lightformer
-                    intensity={.75}
-                    rotation-x={Math.PI / 2}
-                    position={[0, 5, -9]}
-                    scale={[10, 10, 1]}
-                // color="yellow"
-                />
-                <group rotation={[0, .5, 0]} >
-                    <group ref={groupRef}>
-                        {positions.map((x, i) => (
-                            <Lightformer
-                                key={i}
-                                intensity={2}
-                                rotation={[Math.PI / 2, 0, 0]}
-                                position={[x, 4, i * 4.5]}
-                                scale={[3, 3, 1]}
-                                form='circle'
-                                color="yellow"
-                            />
-                        ))}
-                    </group>
-                </group>                
-            </>
-        )
-    }
+    // Animations
+    // const { springs } = useSpring({
+    //     blur: active ? 1 : 0
+    // })
 
     return (
         <>
-            <OrbitControls />
-            <Model />
-            <Environment background resolution={256} blur={0}  >
-                <LightFun />
-            </Environment>
+            <Suspense>
+                {/* Model */}
+                <Center>
+                    <Model />
+                </Center>
+                {/* Lighting */}
+                <Environment background resolution={256} blur={1} frames={degraded ? 1 : Infinity} >
+                    <Lights />
+                </Environment>
+            </Suspense>
+
+            <PerformanceMonitor onDecline={() => degrade(true)} />
+            <ContactShadows position={[0, -1.0, 0]} scale={30} resolution={256} />
+
         </>
     )
 }
